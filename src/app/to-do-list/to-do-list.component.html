@@ -1,0 +1,106 @@
+<section class="vh-100 gradient-custom-2">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-md-12 col-xl-10">
+                <div class="card mask-custom">
+                    <div class="card-body p-4 text-white">
+                        <div class="text-center pt-3 pb-2">
+                            <img src="/assets/logo.png"      
+                                alt="logo coderio_" width="160">
+                            <h2 class="my-4">Lista de tareas</h2>
+                        </div>
+                        <div class="col-md-12" >
+                            <nav class="navbar navbar-light bg-light" >  
+                                <div class="container-fluid">
+                                    <div class="row w-100">
+                                        <div class="col-md-8">
+
+                                            <div class="input-group p-2 d-flex justify-content-center align-items-center"  [formGroup]="filterFormTask">
+                                                <h6 class="text-center" style="color: black; margin-right: 1rem;">Filtrar por:</h6>
+
+                                                <select class="form-select" formControlName="priority" (change)="applyFilters()">
+                                                    <option [ngValue]="null">Sin filtro</option>
+                                                    <option [value]="1">Baja</option>
+                                                    <option [value]="2">Media</option>
+                                                    <option [value]="3">Alta</option>
+                                                </select>
+                                                <select class="form-select ms-2" formControlName="isComplete" (change)="applyFilters()">
+                                                    <option [ngValue]="null">Sin filtro</option>
+                                                    <option [value]="true">Completada</option>
+                                                    <option [value]="false">Pendiente</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 text-md-end">
+                                            <div class="input-group p-2 justify-content-md-end">
+                                                <button type="button" class="btn btn-outline-primary"
+                                                    (click)="openModal(false)">
+                                                    <i class="fas fa-plus fa-lg"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </nav>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table text-white text-center">
+                              <thead>
+                                <tr>
+                                  <th scope="col">ID</th>
+                                  <th scope="col">Tarea</th>
+                                  <th scope="col">Descripcion</th>
+                                  <th scope="col">Estado</th>
+                                  <th scope="col">Prioridad</th>
+                                  <th scope="col">Acciones</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr class="fw-normal" *ngFor="let task of tasks">
+                                  <td class="align-middle">
+                                    <span>{{ task.id }}</span>
+                                  </td>
+                                  <td class="align-middle">
+                                    <span>{{ task.title }}</span>
+                                  </td>
+                                  <td class="align-middle">
+                                    <span>{{ task.description }}</span>
+                                  </td>
+                                  <td class="align-middle">
+                                    <span>{{ task.isComplete ? 'Completada' : 'Pendiente' }}</span>
+                                  </td>
+                                  <td class="align-middle">
+                                    <h6 class="mb-0">
+                                      <span [class]="getPriorityClass(task.priority)">
+                                        {{ getPriorityLabel(task.priority) }}
+                                      </span>
+                                    </h6>
+                                  </td>
+                                  <td class="align-middle">
+                                    <a *ngIf="!task.isComplete" data-mdb-tooltip-init title="Completada">
+                                      <i class="fas fa-check fa-lg text-success me-3 cursor" (click)="completeTask(task.id!,task)"></i>
+                                    </a>
+                                    <a data-mdb-tooltip-init title="Editar" (click)="openModal(true,task.id,task)">
+                                      <i class="fas fa-edit fa-lg me-3 cursor"></i>
+                                    </a>
+                                    <a data-mdb-tooltip-init title="Eliminar" (click)="deleteTask(task.id!)">
+                                      <i class="fas fa-trash-alt fa-lg text-danger cursor"></i>
+                                    </a>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="overlay" *ngIf="modalSwitch" (click)="closeModal()"></div>
+
+<div class="card-modal" *ngIf="modalSwitch">
+    <app-form-task [isUpdate]="showFormUpdate" [task_id]="taskId" [task]="task"  (reloadTaskEvent)="reloadTasksEvent($event)"></app-form-task>
+</div>

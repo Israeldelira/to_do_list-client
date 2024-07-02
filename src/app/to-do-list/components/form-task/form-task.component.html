@@ -1,0 +1,60 @@
+<div class="col-md-12 modal-content">
+    <div class="card">
+        <div class="card-header">
+            <legend class="text-center header">{{ isUpdate ? 'Actualizar Tarea' : 'Agregar Tarea' }}</legend>
+
+        </div>
+        <form [formGroup]="taskForm" (ngSubmit)="submitForm()">
+            <fieldset>                
+                <div class="col-md-12 m-2">                   
+                    <input id="title" name="title" type="text" formControlName="title" placeholder="Ejemplo titulo" class="form-control" required>
+                    <div *ngIf="taskForm.get('title')?.invalid && (taskForm.get('title')?.dirty || taskForm.get('title')?.touched)" class="text-danger">
+                        <div *ngIf="taskForm.get('title')?.errors">El titulo es requerido.</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="col-md-12 m-2">
+                        <textarea class="form-control" id="description" name="description" formControlName="description" placeholder="Descripcion..." required></textarea>
+                        <div *ngIf="taskForm.get('description')?.invalid && (taskForm.get('description')?.dirty || taskForm.get('description')?.touched)" class="text-danger">
+                            <div *ngIf="taskForm.get('description')?.errors">La descripcion es requerida.</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-12 m-2">                   
+                    <select class="form-control" id="isComplete" formControlName="isComplete" required>
+                        <option [value]="null" disabled selected>Estado</option>
+                        <option [value]="true">Completado</option>
+                        <option [value]="false">Pendiente</option>
+                    </select>
+                    <div *ngIf="taskForm.get('isComplete')?.invalid && (taskForm.get('isComplete')?.dirty || taskForm.get('isComplete')?.touched)" class="text-danger">
+                        <div *ngIf="taskForm.get('isComplete')?.errors">Por favor selecciona el estado.</div>
+                    </div>
+                </div>
+                
+                <div class="col-md-12 m-2">                   
+                    <select class="form-control" id="priority" formControlName="priority" required>
+                        <option [value]="0" disabled selected>Prioridad</option>
+                        <option [value]="1">Baja</option>
+                        <option [value]="2">Media</option>
+                        <option [value]="3">Alta</option>
+                    </select>
+                    <div *ngIf="taskForm.get('priority')?.invalid && (taskForm.get('priority')?.dirty || taskForm.get('priority')?.touched)" class="text-danger">
+                        <div *ngIf="taskForm.get('priority')?.errors">Selecciona la prioridad.</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="col-md-12 text-center m-2">
+                        <button type="submit" class="btn btn-primary m-1" [disabled]="taskForm.invalid">{{ isUpdate ? 'Actualizar' : 'Agregar' }}</button>
+                        <button type="button" class="btn btn-danger m-1" data-dismiss="modal" (click)="closeModal();">Cancelar</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+        
+            </fieldset>
+        </form>
+    </div>
+</div>
